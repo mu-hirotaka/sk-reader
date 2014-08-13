@@ -18,15 +18,16 @@ body {
 
 .level {
   width: 100%;
-  background-color: #3eb370;
+  background-color: #ffffb2;
   height: 40px;
   line-height: 40px;
   text-align: center;
-  font-size: 14px;
+  font-size: 18px;
 }
 
 .hp {
   width: 100%;
+  overflow: hidden;
 }
 .hp-value {
   float: left;
@@ -34,7 +35,7 @@ body {
   text-align: center;
   color: #fff;
   font-size: 1.2em;
-  background-color: #f00;
+  background-color: #8484ff;
   width: 20%;
   height: 40px;
   line-height: 40px;
@@ -44,7 +45,58 @@ body {
   margin-left: 0;
   color: #fff;
   font-size: 1.4em;
-  background-color: #00f;
+  background-color: #bcbcff;
   width: 0%;
   height: 40px;
+}
+
+.player-image {
+  height: 200px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+#myChart {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+#my-chart-legend {
+  padding: 10px;
+  overflow: hidden;
+  position: relative;
+}
+
+ul.doughnut-legend {
+  list-style: none outside none;
+  float: left;
+  margin: 0 0 0 0;
+  padding: 0;
+  position: relative;
+  left: 50%;
+}
+
+ul.doughnut-legend > li {
+  float: left;
+  margin-right: 5px;
+  padding: 5px;
+  position: relative;
+  left: -50%;
+}
+
+.honor {
+  width: 100%;
+  background-color: #000;
+  box-shadow: 2px 2px 2px 2px rgba(0,0,0,0.4);
+  background-size: contain;
+  background-position: left;
+  background-repeat: no-repeat;
+  height: 50px;
+  line-height: 50px;
+  padding-left: 60px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #fff;
+  margin-bottom: 7px;
 }
