@@ -35,7 +35,7 @@ body {
   text-align: center;
   color: #fff;
   font-size: 1.2em;
-  background-color: #8484ff;
+  background-color: #000066;
   width: 20%;
   height: 40px;
   line-height: 40px;
@@ -45,9 +45,15 @@ body {
   margin-left: 0;
   color: #fff;
   font-size: 1.4em;
-  background-color: #bcbcff;
-  width: 0%;
+  border: 5px solid #042430;
+  width: 80%;
   height: 40px;
+}
+.hp-gauge > span {
+  display: block;
+  background-color: #042430;
+  height: 40px;
+  width: 100%;
 }
 
 .player-image {

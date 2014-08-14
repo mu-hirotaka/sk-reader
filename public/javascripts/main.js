@@ -1,11 +1,11 @@
 $(function() {
   var HONOR = ['ヒヨッコ', 'サッカー少年', 'アマチュア', 'セミプロ', 'プロ'];
   var HONOR_IMAGE = ['1.jpg', '2.jpg', '3.jpg', '4.gif', '5.jpg'];
-  var GAUGEWIDTH = 80;
+  var GAUGEWIDTH = 100;
   var max = 100;
 
   var $hpValue = $('.hp-value');
-  var $hpGauge = $('.hp-gauge');
+  var $hpGauge = $('.hp-gauge > span');
   var $level = $('.level');
   var $playerImage = $('#player-image');
 
