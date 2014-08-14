@@ -1,10 +1,13 @@
 $(function() {
   var HONOR = ['種', 'ヒヨッコ', 'サッカー少年', 'アマチュア', 'セミプロ', 'プロ', 'レジェンド'];
+  var HONOR_RARE = ['神の種', '小さなロナウド', '将軍', '神の子', 'ゴッド', 'KING', '悪童'];
   var HONOR_IMAGE = ['0.jpg', '1.jpg', '2.jpg', '3.jpg', '4.gif', '5.jpg', '6.jpg'];
+  var HONOR_RARE_IMAGE = ['7.jpg', '8.png', '9.png', '10.jpg', '11.jpg', '12.png', '13.png'];
 
-  var Person = function (exp, level) {
+  var Person = function (exp, level, rarity) {
     this.exp = exp;
     this.level = level;
+    this.rarity = rarity;
     this.levelUp = 0;
   }
   Person.prototype = {
@@ -29,19 +32,35 @@ $(function() {
     },
     levelUpNow : function() { return this.levelUp == 1 ? 1 : 0; },
     getLevelName : function() {
-      if (typeof HONOR[this.getCurrentLevel() - 1] === "undefined") {
-        return HONOR[HONOR.length - 1];
+      if (this.rarity == 0) {
+        if (typeof HONOR[this.getCurrentLevel() - 1] === "undefined") {
+          return HONOR[HONOR.length - 1];
+        } else {
+          return HONOR[this.getCurrentLevel() - 1];
+        }
       } else {
-        return HONOR[this.getCurrentLevel() - 1];
+        if (typeof HONOR_RARE[this.getCurrentLevel() - 1] === "undefined") {
+          return HONOR_RARE[HONOR_RARE.length - 1];
+        } else {
+          return HONOR_RARE[this.getCurrentLevel() - 1];
+        }
       }
     },
     getFormattedLevelText : function() { return 'Lv: ' + this.getCurrentLevel() + ' (' + this.getLevelName() + ')' },
     getLevelImagePath : function() { return '/images/' + this.getLevelImage(); },
     getLevelImage : function() {
-      if (typeof HONOR_IMAGE[this.getCurrentLevel()-1] === "undefined") {
-        return HONOR_IMAGE[HONOR_IMAGE.length - 1];
+      if (this.rarity == 0) {
+        if (typeof HONOR_IMAGE[this.getCurrentLevel()-1] === "undefined") {
+          return HONOR_IMAGE[HONOR_IMAGE.length - 1];
+        } else {
+          return HONOR_IMAGE[this.getCurrentLevel()-1];
+        }
       } else {
-        return HONOR_IMAGE[this.getCurrentLevel()-1];
+        if (typeof HONOR_RARE_IMAGE[this.getCurrentLevel()-1] === "undefined") {
+          return HONOR_RARE_IMAGE[HONOR_RARE_IMAGE.length - 1];
+        } else {
+          return HONOR_RARE_IMAGE[this.getCurrentLevel()-1];
+        }
       }
     }
   };
@@ -53,7 +72,14 @@ $(function() {
 
   var level = parseInt(localStorage.getItem('level')) || 1;
   var exp = parseInt(localStorage.getItem('exp')) || 0;
-  var person = new Person(exp, level);
+  var rarity = parseInt(localStorage.getItem('rarity')) || 0;
+  if (level == 1 && exp == 0) {
+    if (Math.random() > 0.5) {
+      rarity = 1;
+    }
+    localStorage.setItem('rarity', rarity);
+  }
+  var person = new Person(exp, level, rarity);
   var honor_img = person.getLevelImage();
 
   $level.text(person.getFormattedLevelText());
