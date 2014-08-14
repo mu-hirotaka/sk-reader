@@ -1,6 +1,6 @@
 $(function() {
-  var HONOR = ['種', 'ヒヨッコ', 'サッカー少年', 'アマチュア', 'セミプロ', 'プロ'];
-  var HONOR_IMAGE = ['0.jpg', '1.jpg', '2.jpg', '3.jpg', '4.gif', '5.jpg'];
+  var HONOR = ['種', 'ヒヨッコ', 'サッカー少年', 'アマチュア', 'セミプロ', 'プロ', 'レジェンド'];
+  var HONOR_IMAGE = ['0.jpg', '1.jpg', '2.jpg', '3.jpg', '4.gif', '5.jpg', '6.jpg'];
 
   var Person = function (exp, level) {
     this.exp = exp;
