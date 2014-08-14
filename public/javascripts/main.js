@@ -1,73 +1,85 @@
 $(function() {
-  var HONOR = ['ヒヨッコ', 'サッカー少年', 'アマチュア', 'セミプロ', 'プロ'];
-  var HONOR_IMAGE = ['1.jpg', '2.jpg', '3.jpg', '4.gif', '5.jpg'];
-  var GAUGEWIDTH = 100;
-  var max = 100;
+  var HONOR = ['種', 'ヒヨッコ', 'サッカー少年', 'アマチュア', 'セミプロ', 'プロ'];
+  var HONOR_IMAGE = ['0.jpg', '1.jpg', '2.jpg', '3.jpg', '4.gif', '5.jpg'];
+
+  var Person = function (exp, level) {
+    this.exp = exp;
+    this.level = level;
+    this.levelUp = 0;
+  }
+  Person.prototype = {
+    getMaxExp       : function() { return 100; },
+    getCurrentExp   : function() { return this.exp; },
+    getCurrentLevel : function() { return this.level; },
+    addExp : function(value) {
+      this.exp += value;
+      if (this.getCurrentExp() >= this.getMaxExp()) {
+        this.exp = this.getMaxExp();
+        this.levelUp = 1;
+        this.level++;
+      }
+    },
+    getAvailableExpValue : function() { 
+      var exp = [40, 40, 40, 40, 30, 30];
+      if (typeof exp[this.getCurrentLevel() - 1] === "undefined") {
+        return exp[exp.length - 1];
+      } else {
+        return exp[this.getCurrentLevel() - 1];
+      }
+    },
+    levelUpNow : function() { return this.levelUp == 1 ? 1 : 0; },
+    getLevelName : function() {
+      if (typeof HONOR[this.getCurrentLevel() - 1] === "undefined") {
+        return HONOR[HONOR.length - 1];
+      } else {
+        return HONOR[this.getCurrentLevel() - 1];
+      }
+    },
+    getFormattedLevelText : function() { return 'Lv: ' + this.getCurrentLevel() + ' (' + this.getLevelName() + ')' },
+    getLevelImagePath : function() { return '/images/' + this.getLevelImage(); },
+    getLevelImage : function() {
+      if (typeof HONOR_IMAGE[this.getCurrentLevel()-1] === "undefined") {
+        return HONOR_IMAGE[HONOR_IMAGE.length - 1];
+      } else {
+        return HONOR_IMAGE[this.getCurrentLevel()-1];
+      }
+    }
+  };
 
   var $hpValue = $('.hp-value');
   var $hpGauge = $('.hp-gauge > span');
   var $level = $('.level');
   var $playerImage = $('#player-image');
 
-  var level = localStorage.getItem('level');
-  if (level) {
+  var level = parseInt(localStorage.getItem('level')) || 1;
+  var exp = parseInt(localStorage.getItem('exp')) || 0;
+  var person = new Person(exp, level);
+  var honor_img = person.getLevelImage();
 
-  } else {
-    level = 1;
-  }
-  var honor = (typeof HONOR[level - 1] === "undefined") ? 'レジェンド' : HONOR[level - 1];
-  var honor_img = (typeof HONOR_IMAGE[level-1] === "undefined") ? '5.jpg' : HONOR_IMAGE[level-1];
-  if (level >= 10) {
-    honor_img = '6.jpg';
-  }
-  $level.text('Lv: ' + level + ' (' + honor + ')');
-  $playerImage.css("background-image", "url('/images/" + honor_img + "')");
+  $level.text(person.getFormattedLevelText());
+  $hpValue.text(person.getCurrentExp());
+  $hpGauge.css('width', parseInt((person.getCurrentExp()/person.getMaxExp()) * 100) + '%');
+  $playerImage.css("background-image", "url('" + person.getLevelImagePath() + "')");
   $playerImage.addClass('player-image');
 
-  var exp = localStorage.getItem('exp');
-  if (exp) {
-    exp = parseInt(exp);
-  } else {
-    exp = 0;
-  }
-  $hpValue.text(exp);
+  person.addExp(person.getAvailableExpValue());
+  var width = Math.min(parseInt((person.getCurrentExp()/person.getMaxExp()) * 100), 100);
 
-  var beforeWidth = parseInt( (exp/max) * GAUGEWIDTH);
-  $hpGauge.css('width', beforeWidth + '%');
-
-  exp += 30;
-  var width = Math.min(parseInt((exp/max) * GAUGEWIDTH), GAUGEWIDTH);
-
-  exp = Math.min(max, exp);
-  $hpValue.animateNumber(exp, { duration: 2000 });
+  $hpValue.animateNumber(person.getCurrentExp(), { duration: 2000 });
   $hpGauge.animate({ width: width + '%' }, { duration: 2000, complete: function() {
-    if (exp >= max) {
+    if (person.levelUpNow()) {
       $playerImage.fadeOut();
       $hpGauge.animate({ width: '0%' }, { duration: 1000, complete: function() {
         $hpValue.text(0);
         localStorage.setItem('exp', 0);
-
-        var tmpValue = localStorage.getItem('tag3');
-        if (tmpValue >= 5 && level == 4) {
-          level = 10;
-        } else {
-          level++;
-        }
-        localStorage.setItem('level', level);
-
-        var honor = (typeof HONOR[level - 1] === "undefined") ? 'レジェンド' : HONOR[level - 1];
-        var honor_img = (typeof HONOR_IMAGE[level-1] === "undefined") ? '5.jpg' : HONOR_IMAGE[level-1];
-        if (level >= 10) {
-          honor_img = '6.jpg';
-        }
-
-        $level.text('Lv: ' + level + ' (' + honor + ')');
-        $playerImage.css("background-image", "url('/images/" + honor_img + "')");
+        localStorage.setItem('level', person.getCurrentLevel());
+        $level.text(person.getFormattedLevelText());
+        $playerImage.css("background-image", "url('" + person.getLevelImagePath() + "')");
         $playerImage.fadeIn();
 //        history.back();
       }});
     } else {
-      localStorage.setItem('exp', exp);
+      localStorage.setItem('exp', person.getCurrentExp());
 //      history.back();
     }
   }});
