@@ -87,6 +87,9 @@ $(function() {
   $hpGauge.css('width', parseInt((person.getCurrentExp()/person.getMaxExp()) * 100) + '%');
   $playerImage.css("background-image", "url('" + person.getLevelImagePath() + "')");
   $playerImage.addClass('player-image');
+  if (person.level == 1) {
+    $playerImage.addClass('shake');
+  }
 
   person.addExp(person.getAvailableExpValue());
   var width = Math.min(parseInt((person.getCurrentExp()/person.getMaxExp()) * 100), 100);
@@ -94,6 +97,7 @@ $(function() {
   $hpValue.animateNumber(person.getCurrentExp(), { duration: 2000 });
   $hpGauge.animate({ width: width + '%' }, { duration: 2000, complete: function() {
     if (person.levelUpNow()) {
+      $playerImage.removeClass('shake');
       $playerImage.css({transform:'rotate(0deg) scale(1)'}).animate({rotate:'360deg', scale:'0'}, 500, 'linear');
 //      $playerImage.fadeOut();
       $hpGauge.animate({ width: '0%' }, { duration: 1000, complete: function() {
