@@ -68,14 +68,16 @@ $(function() {
   $hpValue.animateNumber(person.getCurrentExp(), { duration: 2000 });
   $hpGauge.animate({ width: width + '%' }, { duration: 2000, complete: function() {
     if (person.levelUpNow()) {
-      $playerImage.fadeOut();
+      $playerImage.css({transform:'rotate(0deg) scale(1)'}).animate({rotate:'360deg', scale:'0'}, 500, 'linear');
+//      $playerImage.fadeOut();
       $hpGauge.animate({ width: '0%' }, { duration: 1000, complete: function() {
         $hpValue.text(0);
         localStorage.setItem('exp', 0);
         localStorage.setItem('level', person.getCurrentLevel());
         $level.text(person.getFormattedLevelText());
         $playerImage.css("background-image", "url('" + person.getLevelImagePath() + "')");
-        $playerImage.fadeIn();
+        $playerImage.css({transform:'rotate(360deg) scale(0)'}).animate({rotate:'0deg', scale:'1'}, 700, 'linear');
+//        $playerImage.fadeIn();
 //        history.back();
       }});
     } else {
