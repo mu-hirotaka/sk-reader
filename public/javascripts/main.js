@@ -38,8 +38,9 @@ $(function() {
   exp += 30;
   var width = Math.min(parseInt((exp/max) * GAUGEWIDTH), GAUGEWIDTH);
 
+  exp = Math.min(max, exp);
+  $hpValue.animateNumber(exp, { duration: 2000 });
   $hpGauge.animate({ width: width + '%' }, { duration: 2000, complete: function() {
-    $hpValue.text(exp);
     if (exp >= max) {
       $playerImage.fadeOut();
       $hpGauge.animate({ width: '0%' }, { duration: 1000, complete: function() {
